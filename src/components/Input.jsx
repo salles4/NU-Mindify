@@ -1,15 +1,23 @@
 import { View, TextInput } from 'react-native'
 import React from 'react'
 
-const Input = ({placeholder, Icon, onChangeText, value, secure = false, style = {}}) => {
+const Input = ({
+  children, placeholder,
+  Icon,
+  onChangeText,
+  value,
+  secure = false,
+  disabled = false,
+  style = {},
+}) => {
   return (
     <View
       style={[
         {
           flexDirection: "row",
           alignItems: "center",
-          backgroundColor: "white",
-          width: "90%",
+          backgroundColor: disabled ? "#c4c4c4" : "white",
+          width: "100%",
           marginHorizontal: "auto",
           padding: 8,
           borderRadius: 24,
@@ -19,16 +27,18 @@ const Input = ({placeholder, Icon, onChangeText, value, secure = false, style = 
         style,
       ]}
     >
-      <Icon color="black" />
+      {Icon && <Icon color="black" />}
       <TextInput
         placeholder={placeholder}
         onChangeText={onChangeText}
         value={value}
         secureTextEntry={secure}
-        style={{flex:1}}
+        disabled={disabled}
+        style={{ flex: 1 }}
       ></TextInput>
+      {children}
     </View>
   );
-}
+};
 
 export default Input

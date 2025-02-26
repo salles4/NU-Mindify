@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "type": "choice",
+    "question": "The area of psychology concerned with the study and enhancement of positive feelings, traits, and abilities is:",
+    "choices": {
+      "a": {
+        "text": "Psychoanalysis.",
+        "rationale": "Either the theory or the treatment of abnormal psychological functioning that emphasizes unconscious psychological forces as the cause of psychopathology. (Theories/Models in abnormal psychology)"
+      },
+      "b": {
+        "text": "Gestalt.",
+        "rationale": "The humanistic therapy developed by Fritz Perls in which clinicians actively move individuals toward selfrecognition and self-acceptance by using techniques such as role-playing and skillful frustration. (Theories/Models in abnormal psychology)"
+      },
+      "c": {
+        "text": "Positive psychology.",
+        "rationale": "The study and enhancement of positive feelings, traits, and abilities. (Theories/Models of abnormal psychology)"
+      },
+      "d": {
+        "text": "Humanistic psychology.",
+        "rationale": "Humanistic psychology: The theoretical perspective that human beings are born with a natural inclination to be friendly, cooperative, and constructive and are driven to self-actualize. (Theories/Models in abnormal psychology)"
+      }
+    },
+    "answer": "c",
+    "ytlink": null,
+    "image": null
+  }
+]

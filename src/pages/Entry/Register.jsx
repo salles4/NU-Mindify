@@ -1,11 +1,10 @@
-import { Text } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
-import Animated, { FlipInXUp, FlipOutXDown, useAnimatedKeyboard, useAnimatedStyle } from 'react-native-reanimated'
-import styles from '../styles/styles'
-import Input from '../components/Input'
+import Animated, { FlipInXUp, FlipOutXDown } from 'react-native-reanimated'
+import styles from '../../styles/styles'
+import Input from '../../components/Input'
 import { LockKeyhole, Mail, UserCircle2 } from 'lucide-react-native'
-import { RectButton } from 'react-native-gesture-handler'
-import AccountContext from '../contexts/AccountContext'
+import AccountContext from '../../contexts/AccountContext'
 
 const Register = ({set}) => {
 
@@ -15,22 +14,17 @@ const Register = ({set}) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const {setAccountData} = useContext(AccountContext);
 
-
-  const keyboard = useAnimatedKeyboard();
-
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [{ translateY: -keyboard.height.value/2 }],
-  }));
-
   return (
     <>
-      <Animated.View entering={FlipInXUp} exiting={FlipOutXDown} style={{width:'100%'}}>
-        <Animated.View style={[animatedStyles, styles.entryBackground]}>
+        <Animated.View
+          entering={FlipInXUp}
+          exiting={FlipOutXDown}
+          style={[styles.entryBackground]}
+        >
           <Text style={styles.entryTitle}>Register</Text>
           <Text style={styles.entryBody}>
             Join NUMindify and start boosting your knowledge today
           </Text>
-          <Animated.View></Animated.View>
           <Input
             placeholder={"Username"}
             Icon={UserCircle2}
@@ -58,7 +52,7 @@ const Register = ({set}) => {
             onChangeText={(text) => setConfirmPassword(text)}
             value={confirmPassword}
           />
-          <RectButton
+          <TouchableOpacity
             onPress={() => {
               setAccountData({ username, password });
             }}
@@ -67,9 +61,8 @@ const Register = ({set}) => {
             <Animated.View style={styles.button}>
               <Text style={styles.buttonText}>Register</Text>
             </Animated.View>
-          </RectButton>
+          </TouchableOpacity>
         </Animated.View>
-      </Animated.View>
       <Animated.View
         entering={FlipInXUp}
         exiting={FlipOutXDown}

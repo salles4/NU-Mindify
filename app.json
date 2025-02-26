@@ -20,13 +20,11 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
+      "softwareKeyboardLayoutMode": "pan",
       "package": "com.codeverse.numindify"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "androidNavigationBar": {
-      "visible": "immersive"
     }
   }
 }
