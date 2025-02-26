@@ -1,10 +1,11 @@
-import { Text, TouchableOpacity } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { Text, ToastAndroid, TouchableOpacity } from 'react-native'
+import React, { use, useContext, useState } from 'react'
 import Animated, { FlipInXUp, FlipOutXDown } from 'react-native-reanimated'
 import styles from '../../styles/styles'
 import Input from '../../components/Input'
 import { LockKeyhole, Mail, UserCircle2 } from 'lucide-react-native'
 import AccountContext from '../../contexts/AccountContext'
+import useAccount from '../../contexts/useAccount'
 
 const Register = ({set}) => {
 
@@ -12,7 +13,33 @@ const Register = ({set}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const {setAccountData} = useContext(AccountContext);
+
+  const { createAccount } = useAccount();
+  const onSubmit = () => {
+    if(username.trim() === ""){
+      ToastAndroid.show("Username Field is required.", ToastAndroid.SHORT)
+      return;
+    }
+    
+    if(email.trim() === ""){
+      ToastAndroid.show("Email Field is required.", ToastAndroid.SHORT)
+      return;
+    }
+    
+    if (password.trim() === "") {
+      ToastAndroid.show("Password Field is required.", ToastAndroid.SHORT);
+      return;
+    }
+    
+    if(password.trim() !== confirmPassword.trim()){
+      ToastAndroid.show("Passwords does not match", ToastAndroid.SHORT)
+      return;
+    }
+    
+    createAccount({
+      username, email, password
+    })
+  }
 
   return (
     <>
@@ -53,9 +80,7 @@ const Register = ({set}) => {
             value={confirmPassword}
           />
           <TouchableOpacity
-            onPress={() => {
-              setAccountData({ username, password });
-            }}
+            onPress={onSubmit}
             style={styles.buttonOpacity}
           >
             <Animated.View style={styles.button}>

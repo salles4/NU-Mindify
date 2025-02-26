@@ -1,14 +1,16 @@
 import { View, Text, ToastAndroid } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppBackground from "../../components/AppBackground";
 import Questions from "./Questions";
 import LevelBackground from "../../assets/maps/1.png";
 import data from "./data.json";
 import RationaleModal from "./RationaleModal";
 import Results from "./Results";
+import AccountContext from "../../contexts/AccountContext";
 
 const Game = (props) => {
-  const level = props.route.params.level;
+  const { level, levelIndex, category} = props.route.params;
+  const {accountData, setAccountData} = useContext(AccountContext)
   const [questions, setQuestions] = useState(null);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -52,6 +54,16 @@ const Game = (props) => {
         `Done\nCorrect: ${stats.correct}\nWrong: ${stats.wrong}`,
         ToastAndroid.SHORT
       );
+      
+      const newAccountData = accountData
+      console.log(accountData.progress[category] === levelIndex);
+      
+      if (accountData.progress[category] === levelIndex) {
+        newAccountData.progress[category] = accountData.progress[category] + 1;
+        setAccountData(newAccountData);
+        console.log("settedAccount", newAccountData);
+      }
+
       setCurrentNumber((current) => current + 1);
       return;
     }
@@ -82,7 +94,7 @@ const Game = (props) => {
       )}
       {rationaleModal && <RationaleModal modal={rationaleModal} />}
       {questions && currentNumber === questions.length && (
-        <Results stats={stats} />
+        <Results stats={stats} category={category} />
       )}
     </AppBackground>
   );

@@ -10,8 +10,9 @@ import levelyellowPressed from '../../assets/level/levelyellowPressed.png'
 import React, { useContext, useState } from 'react'
 import ModalContext from '../../contexts/ModalContext';
 import { useNavigation } from '@react-navigation/native';
+import Animated, { BounceIn } from 'react-native-reanimated';
 
-const LevelButton = ({bottom, left, level, state}) => {
+const LevelButton = ({bottom, left, level, state, index}) => {
   const [isPressing, setIsPressing] = useState(false)
 
   const getSource = () => {
@@ -44,11 +45,11 @@ const LevelButton = ({bottom, left, level, state}) => {
       onPressIn={() => setIsPressing(true)}
       onPressOut={() => setIsPressing(false)}
       onPress={() => {
-        if(state === "soon") return;
+        if (state === "soon") return;
         setModal({
           subtitle: `Start Level ${level}?`,
           primaryFn: () => {
-            nav.navigate("Game", { level: level });
+            nav.replace("Game", { level, levelIndex: index, category:0 });
             setModal(null);
           },
           secondaryFn: () => {
@@ -59,17 +60,31 @@ const LevelButton = ({bottom, left, level, state}) => {
         });
       }}
     >
-      <Image source={getSource()} style={{width:100, height:100}} resizeMode="contain" />
-      <Text
+      <Animated.View
+        entering={BounceIn.delay(200 * index)}
         style={{
-          color: "white",
-          fontWeight: 900,
-          fontSize: 32,
-          transform: [{ translateY: -40 }],
+          justifyContent: "center",
+          alignItems: "center",
+          width: 48,
+          height: 60,
         }}
       >
-        {level}
-      </Text>
+        <Animated.Image
+          source={getSource()}
+          style={{ width: 100, height: 100 }}
+          resizeMode="contain"
+        />
+        <Text
+          style={{
+            color: "white",
+            fontWeight: 900,
+            fontSize: 32,
+            transform: [{ translateY: -40 }],
+          }}
+        >
+          {level}
+        </Text>
+      </Animated.View>
     </Pressable>
   );
 }

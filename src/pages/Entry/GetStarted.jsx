@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import Animated, { BounceIn, BounceOut, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { BounceIn, FadeIn, FadeOut } from 'react-native-reanimated';
 import Login from './Login';
 import styles from '../../styles/styles';
-import { Gesture, GestureDetector, Pressable } from 'react-native-gesture-handler';
 import Register from './Register';
 import AppBackground from "../../components/AppBackground";
 import MindifyLogo from "../../assets/Logo.png";
+import { printStorage } from '../../contexts/useAccount';
 
 export default function GetStarted() {
   const [state, setState] = useState("get started");
@@ -36,7 +36,6 @@ export default function GetStarted() {
 
 const GetStartedButton = ({set}) => {
   
-
   return (
     <TouchableOpacity
           style={[
@@ -44,6 +43,7 @@ const GetStartedButton = ({set}) => {
             { marginTop: "auto" },
           ]}
           onPress={() => {
+            printStorage()
             set("login");
           }}
         >

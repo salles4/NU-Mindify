@@ -8,12 +8,13 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Home from './src/pages/Home/Home';
 import Chatbot from './src/pages/Chatbot/Chatbot';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { StatusBar, Text } from 'react-native';
+import { StatusBar, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import StartModal from './src/components/StartModal'
 import AbnormalLevels from './src/pages/Level/AbnormalLevels';
 import Game from './src/pages/Game/Game';
 import EditProfile from './src/pages/Profile/EditProfile';
+import { ResetButton, updateStorage } from './src/contexts/useAccount';
 
 /**
  * @typedef {object} Modal
@@ -27,8 +28,11 @@ import EditProfile from './src/pages/Profile/EditProfile';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const queryClient = new QueryClient()
-
-  const [accountData, setAccountData] = useState({ uid: 'null' })
+  const [accountData, setAccountState] = useState(null)
+  const setAccountData = (value) => {
+    setAccountState(value);
+    updateStorage(value)
+  }
   /**
    * @type {[Modal, React.Dispatch<React.SetStateAction<Modal>>]}
    */
@@ -42,6 +46,7 @@ export default function App() {
             <ModalContext.Provider value={{ modal, setModal }}>
               <GestureHandlerRootView>
                 <Text style={{ position: 'absolute', bottom: 4, color: 'white', zIndex: 5, textAlign: 'center', width: '100%', fontSize: 12, opacity:0.4}}>Early Dev Build - 2.26 - Placeholders and Sample Assets are used. </Text>
+                <ResetButton />
                 <Stack.Navigator screenOptions={{ headerShown: false, statusBarHidden: true, navigationBarHidden: true, }}>
                   <Stack.Screen name='Get Started' component={GetStarted} />
 

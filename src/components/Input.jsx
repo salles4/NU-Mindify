@@ -9,6 +9,7 @@ const Input = ({
   secure = false,
   disabled = false,
   style = {},
+  inputStyle = {}
 }) => {
   return (
     <View
@@ -34,7 +35,7 @@ const Input = ({
         value={value}
         secureTextEntry={secure}
         disabled={disabled}
-        style={{ flex: 1 }}
+        style={[{ flex: 1 }, inputStyle]}
       ></TextInput>
       {children}
     </View>

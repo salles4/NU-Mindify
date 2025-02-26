@@ -2,11 +2,11 @@ import { LockKeyhole, UserCircle2 } from "lucide-react-native";
 import { useContext, useState } from "react";
 import Animated, { FlipInXUp, FlipOutXDown } from "react-native-reanimated";
 import Input from "../../components/Input";
-import { Text, TouchableOpacity, View } from "react-native";
-import { BaseButton } from "react-native-gesture-handler";
+import { Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import AccountContext from "../../contexts/AccountContext";
 import styles from "../../styles/styles";
 import { useNavigation } from "@react-navigation/native";
+import useAccount from "../../contexts/useAccount";
 
 const Login = ({ set }) => {
   const [username, setUsername] = useState("");
@@ -14,7 +14,21 @@ const Login = ({ set }) => {
 
   const { setAccountData } = useContext(AccountContext);
   const nav = useNavigation();
+  const { login } = useAccount();
 
+  const onSubmit = () => {
+    if(username.trim() === ""){
+      ToastAndroid.show("Username Field is required.", ToastAndroid.SHORT);
+      return;
+    }
+    if(password.trim() === ""){
+      ToastAndroid.show("Password Field is required.", ToastAndroid.SHORT);
+      return;
+    }
+    login({
+      username, password
+    })
+  }
   return (
     <>
       <Animated.View
@@ -37,13 +51,7 @@ const Login = ({ set }) => {
           onChangeText={(text) => setPassword(text)}
           value={password}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setAccountData({ uid: username });
-            nav.replace("Home")
-          }}
-          style={styles.buttonOpacity}
-        >
+        <TouchableOpacity onPress={onSubmit} style={styles.buttonOpacity}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Log In</Text>
           </View>

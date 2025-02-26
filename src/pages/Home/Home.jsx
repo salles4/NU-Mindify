@@ -24,11 +24,12 @@ import MindifiyLogo from "../../assets/Logo.png";
 import AppBackground from "../../components/AppBackground";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { avatars } from '../../constants'
 
 const Home = () => {
   const nav = useNavigation();
-
-  const { setAccountData } = useContext(AccountContext);
+  const { accountData, setAccountData } = useContext(AccountContext);
+  const Avatar = avatars[accountData.avatar]
 
   return (
     <Animated.View entering={FadeIn.duration(700)} style={{ flex: 1 }}>
@@ -41,8 +42,8 @@ const Home = () => {
             padding: 8,
           }}
         >
-          <Pressable style={styles.homeRoundedIcon} onPress={() => nav.navigate("Edit Profile")}>
-            <UserCircle size={32} color={"black"} />
+          <Pressable style={[styles.homeRoundedIcon, {padding:4}]} onPress={() => nav.navigate("Edit Profile")}>
+            <Avatar width={60} height={60} />
           </Pressable>
           <Animated.Image
             source={MindifiyLogo}

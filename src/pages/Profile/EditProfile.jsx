@@ -1,40 +1,94 @@
-import { View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Pressable, ToastAndroid } from "react-native";
+import React, { useContext, useState } from "react";
 import AppBackground from "../../components/AppBackground";
 import styles from "../../styles/styles";
-import BlackOrangeGirl from "../../assets/avatar/blackOrangeGirl.svg";
-import BlueMan from "../../assets/avatar/blueMan.svg";
-import OrangeMan from "../../assets/avatar/orangeMan.svg";
-import RedGirl from "../../assets/avatar/redGirl.svg";
-import WhiteMan from "../../assets/avatar/whiteMan.svg";
-import WhiteOrangeGirl from "../../assets/avatar/whiteOrangeGirl.svg";
 import Button from "../../components/Button";
 import LevelTitle from "../../assets/level/levelTitle.svg";
 import { useNavigation } from "@react-navigation/native";
-
-const avatars = [
-  BlackOrangeGirl,
-  BlueMan,
-  OrangeMan,
-  RedGirl,
-  WhiteMan,
-  WhiteOrangeGirl,
-];
+import { avatars } from "../../constants";
+import AccountContext from "../../contexts/AccountContext";
+import Input from "../../components/Input";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EditProfile = () => {
   const nav = useNavigation();
-  const [selectedAvatar, setSelectedAvatar] = useState(-1)
+  const { accountData, setAccountData } = useContext(AccountContext);
+  const [selectedAvatar, setSelectedAvatar] = useState(accountData.avatar);
+  const Avatar = avatars[selectedAvatar];
+  const [inputName, setInputName] = useState(accountData.username)
+
+  const onSave = async () => {
+
+    try {
+      const accountsStorage = (await AsyncStorage.getItem("accounts")) || "[]";
+      const jsonAccounts = JSON.parse(accountsStorage);
+      
+      let usernameDuplicate = false;
+      jsonAccounts.map(account => {
+        if (accountData.id !== account.id && inputName === account.username) {
+          usernameDuplicate = true;
+        }
+      })
+      if(usernameDuplicate){
+        ToastAndroid.show("Username already exist.", ToastAndroid.SHORT);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    const newData = { ...accountData, avatar: selectedAvatar, username:inputName };
+    setAccountData(newData);
+    nav.goBack();
+  }
+
   return (
     <AppBackground>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={[styles.entryBackground, { padding: 8, width: "80%" }]}>
           <Text style={styles.entryTitle}>Edit Profile</Text>
         </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              borderRadius: 99,
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 8,
+              borderColor: "#FFD41C",
+              width: 160,
+              height: 160,
+            }}
+          >
+            <Avatar width={120} height={120} />
+          </View>
+          <Input
+            text={"Name"}
+            style={
+              {
+                backgroundColor: "#2C519F",
+                borderRadius: 24,
+                boxShadow: "0px 2px 12px #EDE09480",
+                borderWidth: 8,
+                borderColor: "#FFD41C",
+                width: "70%",
+                marginTop: 20,
+              }
+            }
+            inputStyle={styles.entryTitle}
+            value={inputName}
+            onChangeText={(text) => {setInputName(text)}}
+          />
+        </View>
       </View>
+      {/* Split */}
       <View
         style={{
-          borderTopColor:'#FDD116',
-          borderTopWidth:6,
+          borderTopColor: "#FDD116",
+          borderTopWidth: 6,
           backgroundColor: "#273574",
           justifyContent: "center",
           alignItems: "center",
@@ -77,7 +131,7 @@ const EditProfile = () => {
         </View>
         <Button
           style={{ flex: 0, width: "50%" }}
-          onPress={() => {nav.goBack()}}
+          onPress={onSave}
           text={"Save"}
         />
       </View>

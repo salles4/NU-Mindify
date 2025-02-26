@@ -1,50 +1,44 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppBackground from "../../components/AppBackground";
 import styles from "../../styles/styles";
 import Input from "../../components/Input";
-import { MessageSquareTextIcon, SendHorizonal, XCircle } from "lucide-react-native";
+import {
+  MessageSquareTextIcon,
+  SendHorizonal,
+  XCircle,
+} from "lucide-react-native";
 import { Pressable } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import AccountContext from "../../contexts/AccountContext";
 
 const Chatbot = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const [isFetching, setIsFetching] = useState(false)
-  const nav = useNavigation()
+  const [isFetching, setIsFetching] = useState(false);
+  const { accountData, setAccountData } = useContext(AccountContext);
+  const nav = useNavigation();
 
   const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("messages");
-      setMessages(
-        jsonValue != null
-          ? JSON.parse(jsonValue)
-          : [
-              {
-                sender: "ai",
-                message:
-                  "Hey there, future psychologist! 👋 I'm your friendly Mindibot! here to help you ace your studies. Ready to mindify your reviews?",
-              },
-            ]
-      );
-    } catch (e) {
-      console.error(e);
-    }
+    setMessages(
+      accountData.chat.length !== 0 ? accountData.chat : [
+        {
+          sender: "ai",
+          message:
+            "Hey there, future psychologist! 👋 I'm your friendly Mindibot! here to help you ace your studies. Ready to mindify your reviews?",
+        },
+      ]
+    );
   };
   const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("messages", jsonValue);
-    } catch (e) {
-      console.error(e);
-    }
+    setAccountData({...accountData, chat: value})
   };
   useEffect(() => {
     getData();
   }, []);
   const sendMessage = () => {
-    setIsFetching(true)
+    setIsFetching(true);
     fetch("https://get-psych-backend.vercel.app/api/chat", {
       method: "POST",
       headers: {
@@ -78,9 +72,7 @@ const Chatbot = () => {
       });
   };
   const formatAIText = (message) => {
-    return message
-      .replace(/\*\*(.+?)\*\*/g, "$1")
-      .replace(/\*(.+?)/g, "• ")
+    return message.replace(/\*\*(.+?)\*\*/g, "$1").replace(/\*(.+?)/g, "• ");
   };
   return (
     <AppBackground style={{ padding: 28 }}>

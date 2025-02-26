@@ -34,7 +34,6 @@ const CategoryCarousel = () => {
   });
 
   const {modal, setModal} = useContext(ModalContext)
-  const [selectedIndex, setSelectedIndex] = useState(-1)
 
   return (
     <>
@@ -53,7 +52,7 @@ const CategoryCarousel = () => {
                   subtitle: titles[index],
                   body: "Start to take the quiz?",
                   primaryFn: () => {
-                    nav.navigate("AbnormalLevels");
+                    nav.navigate("AbnormalLevels", {category: index});
                     setModal(null);
                   },
                   secondaryFn: () => {

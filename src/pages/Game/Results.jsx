@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Animated, {
   BounceIn,
   FadeOut,
@@ -16,9 +16,13 @@ import smallStarEmpty from "../../assets/results/smallStarEmpty.png";
 import bigStar from "../../assets/results/bigStar.png";
 import bigStarEmpty from "../../assets/results/bigStarEmpty.png";
 import Button from "../../components/Button";
+import AccountContext from "../../contexts/AccountContext";
+import { avatars } from "../../constants";
 
-const Results = ({ stats }) => {
+const Results = ({ stats, category }) => {
   const nav = useNavigation();
+  const {accountData, setAccountData} = useContext(AccountContext)
+  const Avatar = avatars[accountData.avatar];
   return (
     <View style={{ alignItems: "center" }}>
       {/* --Completed-- Banner */}
@@ -74,24 +78,18 @@ const Results = ({ stats }) => {
             style={{
               backgroundColor: "white",
               borderRadius: 99,
-              justifyContent:'center',
-              alignItems:'center',
+              justifyContent: "center",
+              alignItems: "center",
               borderWidth: 8,
               borderColor: "#FFD41C",
               width: 120,
               height: 120,
             }}
           >
-            {/* <Image
-              source={range}
-              style={{ width: 100, height: 100 }}
-              resizeMethod="scale"
-              resizeMode="contain"
-            /> */}
-            <Orange/>
+            <Avatar />
           </View>
           <Text style={{ fontSize: 24, fontWeight: 900, color: "white" }}>
-            Francis
+            {accountData.username}
           </Text>
           <Text
             style={{
@@ -126,7 +124,12 @@ const Results = ({ stats }) => {
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 8 }}
         >
-          <Button onPress={() => nav.goBack()} text={"Next Level"} />
+          <Button
+            onPress={() =>
+              nav.replace("AbnormalLevels", { category: category })
+            }
+            text={"Next Level"}
+          />
           <Button onPress={() => nav.goBack()} text={"Review"} />
         </View>
       </Animated.View>
